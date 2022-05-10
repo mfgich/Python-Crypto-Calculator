@@ -51,28 +51,22 @@ listbox2.grid(column=7, row=12)
 Ergebnis = ""
 Formel = ""
 
-
 def Rechnung():
     Formel = label1.cget("text")
     global Ergebnis
     Ergebnis = eval(Formel)
     label2["text"] = str(Ergebnis)
-    print(type(Ergebnis))
-
-
+    
 def Binaer():
     ergBin = bin(int(Ergebnis))
     label3["text"] = ergBin
-
 
 def Hex():
     ergHex = hex(int(Ergebnis))
     label4["text"] = ergHex
 
-
 def Zeig_Text(Wert):
     label1["text"] += Wert
-
 
 def clear():
     label1["text"] = ""
@@ -83,20 +77,17 @@ def clear():
     label6["text"] = ""
     entryl.delete("0", "end")
 
-
 def btc():
     response = requests.get(
         "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd")
     dict_BTC = json.loads(response.text)
     label5["text"] = dict_BTC["bitcoin"]["usd"]
 
-
 def eth():
     response = requests.get(
         "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd")
     dict_ETH = json.loads(response.text)
     label6["text"] = dict_ETH["ethereum"]["usd"]
-
 
 def Graph():
     plt.get_current_fig_manager().set_window_title("Plot BTC ETH und ADA zu USD")
@@ -122,7 +113,6 @@ def Graph():
 
     plt.show()
 
-
 def Graph_einzeln():
 
     v = entryl.get()
@@ -141,7 +131,6 @@ def Graph_einzeln():
     plt.legend(facecolor='k', labelcolor='w', loc="upper left")
 
     plt.show()
-
 
 def cur_auswahl():
     Indices = listbox1.curselection()
@@ -164,7 +153,6 @@ def cur_auswahl():
 
     plt.show()
 
-
 def createNewWindow():
     newWindow = tk.Toplevel(root)
     newWindow.geometry("400x320")
@@ -186,25 +174,25 @@ def createNewWindow():
     labelInfo3 = tk.Label(newWindow, text="", background="white",
                           foreground="red", width=20, height=2, relief=tk.SUNKEN, font=myFont)
     labelInfo3.grid(column=2, row=4, columnspan=2)
-    labelInfo3_1 = tk.Label(newWindow, text="high 24h", background="white",
+    labelInfo3_1 = tk.Label(newWindow, text="high 24h in USD", background="white",
                             foreground="black", width=20, height=2, relief=tk.SUNKEN, font=myFont)
     labelInfo3_1.grid(column=1, row=4,)
     labelInfo4 = tk.Label(newWindow, text="", background="white",
                           foreground="red", width=20, height=2, relief=tk.SUNKEN, font=myFont)
     labelInfo4.grid(column=2, row=5, columnspan=2)
-    labelInfo4_1 = tk.Label(newWindow, text="low 24h", background="white",
+    labelInfo4_1 = tk.Label(newWindow, text="low 24h in USD", background="white",
                             foreground="black", width=20, height=2, relief=tk.SUNKEN, font=myFont)
     labelInfo4_1.grid(column=1, row=5,)
     labelInfo5 = tk.Label(newWindow, text="", background="white",
                           foreground="red", width=20, height=2, relief=tk.SUNKEN, font=myFont)
     labelInfo5.grid(column=2, row=6, columnspan=2)
-    labelInfo5_1 = tk.Label(newWindow, text="Price change 24h", background="white",
+    labelInfo5_1 = tk.Label(newWindow, text="Price change 24h in USD", background="white",
                             foreground="black", width=20, height=2, relief=tk.SUNKEN, font=myFont)
     labelInfo5_1.grid(column=1, row=6,)
     labelInfo6 = tk.Label(newWindow, text="", background="white",
                           foreground="red", width=20, height=2, relief=tk.SUNKEN, font=myFont)
     labelInfo6.grid(column=2, row=7, columnspan=2)
-    labelInfo6_1 = tk.Label(newWindow, text="All time hight", background="white",
+    labelInfo6_1 = tk.Label(newWindow, text="All time hight in USD", background="white",
                             foreground="black", width=20, height=2, relief=tk.SUNKEN, font=myFont)
     labelInfo6_1.grid(column=1, row=7,)
     labelInfo7 = tk.Label(newWindow, text="", background="white",
@@ -218,20 +206,18 @@ def createNewWindow():
     for index in Indices:
         c = listbox2.get(index)
 
-    name = str(c)
-    print(name)
+    name = str(c)    
     response = requests.get(
         f"https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids={name}&order=market_cap_desc&per_page=100&page=1&sparkline=false")
-    print(response)
     dict_BTC = json.loads(response.text)
+    priceChange24 = dict_BTC[0]["price_change_24h"]
     labelInfo1["text"] = dict_BTC[0]["id"]
     labelInfo2["text"] = dict_BTC[0]["current_price"]
     labelInfo3["text"] = dict_BTC[0]["high_24h"]
     labelInfo4["text"] = dict_BTC[0]["low_24h"]
-    labelInfo5["text"] = dict_BTC[0]["price_change_24h"]
+    labelInfo5["text"] = round(priceChange24, 2)
     labelInfo6["text"] = dict_BTC[0]["ath"]
     labelInfo7["text"] = dict_BTC[0]["ath_change_percentage"]
-
 
 button1 = tk.Button(root, text="1", width=20, height=2,
                     command=lambda: Zeig_Text("1"), font=myFont)
